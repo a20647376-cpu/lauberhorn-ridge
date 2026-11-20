@@ -1,0 +1,548 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta charset="utf-8">
+<title>Lauberhorn Ridge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one 1440x900 frame scaled to cover the viewport; every widget is placed in frame units. Phones stack the cards below the photo. */
+:root{
+  --card:rgba(244,240,233,.94); --panel:#EAE6DE; --ink:#2E2D2A; --amber:#F6B733; --amber-l:#FBD06A;
+  --pin-o:#F59E0B; --pin-v:#7C6CF2; --peach:rgba(248,232,205,.92); --line:#c9c5bc; --grey:#B3AEA3;
+  --sans:"Inter Tight","Segoe UI",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:#0F2A3C;color:var(--ink);font:400 16px/1.3 var(--sans);overflow-x:hidden;overflow-y:auto}
+.stage{position:relative;width:100%;height:100vh;overflow:hidden}
+.frame{position:absolute;left:50%;top:50%;width:1440px;height:900px;margin:-450px 0 0 -720px;transform:scale(var(--u,1));transform-origin:50% 50%}
+.head,.row1,.cards{display:contents}
+.abs{position:absolute}
+.mono{font-family:var(--mono);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+
+/* plate + drone video */
+.bg{position:absolute;inset:0;overflow:hidden;background:#2a6fa5}
+.bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;display:block}
+.bg video{position:absolute;top:0;left:-5.556%;width:111.11%;height:100%;object-fit:fill;opacity:0;transition:opacity .8s ease}
+.bg video.on{opacity:1}
+
+/* header */
+.logo{left:15px;top:14px;width:41px;height:38px;border-radius:12px;background:var(--card);display:grid;place-items:center;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.logo svg{width:22px;height:22px}
+.user{left:62px;top:14px;height:38px;border-radius:12px;background:var(--card);display:flex;align-items:center;gap:8px;padding:0 12px 0 11px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.user .cc{font-family:var(--mono);font-weight:500;letter-spacing:-.18em;font-size:13px;color:var(--ink)}
+.user b{font-weight:400;font-size:18px}
+.ring{width:12px;height:12px;border-radius:50%;border:3px solid var(--pin-o)}
+.crumbs{left:15px;top:73px;font:500 12.6px/1.2 var(--mono);color:#fff;text-shadow:0 1px 6px rgba(10,30,50,.35);white-space:pre}
+.crumbs a{color:inherit;text-decoration:none}
+h1.title{left:20px;top:86px;margin:0;font:300 96px/1.05 var(--sans);letter-spacing:-.045em;color:#fff;text-shadow:0 2px 14px rgba(10,30,50,.3);white-space:nowrap}
+.chips{left:15px;top:198px;display:flex;gap:8px}
+.chip{height:32px;border-radius:9px;background:var(--peach);display:flex;align-items:center;gap:8px;padding:0 12px 0 6px;font:500 14px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.chip svg{width:20px;height:20px;flex:none}
+
+/* cards */
+.card{position:absolute;border-radius:16px;background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);overflow:hidden}
+.lbl{font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.lbl i{font-style:normal;letter-spacing:-.2em;margin-right:6px}
+
+/* search */
+.c-search{left:15px;top:462px;width:359px;height:137px;padding:14px 14px}
+.c-search h2{margin:0;font:400 25px/1 var(--sans)}
+.c-search .field{margin-top:12px;height:37px;border-radius:10px;background:var(--panel);display:flex;align-items:center;padding:0 12px}
+.field input{flex:1;min-width:0;border:0;background:transparent;font:500 12px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink);outline:0}
+.field input::placeholder{color:var(--ink);opacity:.8}
+.field:focus-within{box-shadow:0 0 0 2px var(--amber)}
+.field svg{width:17px;height:17px;flex:none}
+
+/* map */
+.c-map{left:15px;top:612px;width:358px;height:215px}
+.c-map svg.map{position:absolute;inset:0;width:100%;height:100%;display:block}
+.c-map .lbl,.c-alt .lbl,.c-w .lbl,.c-info .lbl{position:relative}
+.c-map .lbl{position:absolute;left:14px;top:14px;z-index:2}
+
+/* photo */
+.c-photo{left:383px;top:612px;width:336px;height:215px;background:#2a6fa5}
+.c-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:72% 50%;display:block}
+.c-photo .bar{position:absolute;left:12px;bottom:12px;display:flex;align-items:center;gap:8px}
+.play{width:38px;height:38px;border-radius:50%;border:0;background:#fff;display:grid;place-items:center;cursor:pointer;transition:transform .2s;padding:0}
+.play:hover{transform:scale(1.08)}
+.play svg{width:14px;height:14px;margin-left:2px}
+.play:focus-visible,.tab:focus-visible{outline:3px solid var(--pin-v);outline-offset:2px}
+.pchip{height:32px;border-radius:10px;background:var(--amber-l);display:flex;align-items:center;gap:7px;padding:0 11px;font:400 14px/1 var(--sans)}
+.pchip svg{width:16px;height:16px}
+
+/* altitude */
+.c-alt{left:728px;top:612px;width:387px;height:215px;padding:12px}
+.c-alt .top{display:flex;justify-content:space-between;align-items:center}
+.legend{display:flex;align-items:center;gap:10px;font:500 9.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.legend span{display:flex;align-items:center;gap:4px}
+.legend em{width:7px;height:7px;border-radius:50%;display:inline-block}
+.chart{position:absolute;left:12px;top:36px;width:363px;height:124px}
+.tabs{position:absolute;left:12px;right:12px;bottom:12px;height:36px;border-radius:11px;background:var(--panel);display:flex;gap:2px;padding:3px}
+.tab{flex:1;border:0;background:transparent;border-radius:8px;font:500 10.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer;padding:0 4px}
+.tab svg{width:13px;height:13px;display:none}
+.tab[aria-selected="true"]{background:var(--amber-l)}
+.tab[aria-selected="true"] svg,.tab[data-icon] svg{display:block}
+.tab:not([aria-selected="true"]):hover{background:rgba(251,208,106,.35)}
+
+/* weather */
+.c-w{left:1126px;top:12px;width:303px;height:380px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.gauge{position:relative;height:242px;border-radius:12px;background:var(--panel);flex:none}
+.gauge svg{position:absolute;inset:0;width:100%;height:100%}
+.pill{position:absolute;left:50%;top:12px;transform:translateX(-50%);height:24px;border-radius:8px;background:#F4F0E9;padding:0 12px;display:flex;align-items:center;font:500 10.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.temp{position:absolute;left:0;right:0;top:92px;text-align:center;font:300 74px/1 var(--sans);letter-spacing:-.03em}
+.grow{position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:space-between;padding:0 16px;font:500 13px/1 var(--mono);letter-spacing:.04em}
+.tiles{display:flex;gap:8px;flex:1}
+.tile{flex:1;border-radius:12px;background:var(--panel);padding:10px;display:flex;flex-direction:column;justify-content:space-between}
+.tile .t1{display:flex;align-items:center;gap:7px;font:500 10px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.disc{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex:none}
+.disc svg{width:12px;height:12px}
+.tile .v{font:500 18.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.02em}
+
+/* trail info */
+.c-info{left:1126px;top:402px;width:303px;height:425px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.ip{height:118px;border-radius:12px;background:var(--panel);padding:12px;display:flex;flex-direction:column;justify-content:space-between;flex:none}
+.sq{width:36px;height:36px;border-radius:10px;background:rgba(246,183,51,.28);display:grid;place-items:center}
+.sq svg{width:20px;height:20px}
+.ip b{display:block;font:400 38px/1 var(--sans);letter-spacing:-.02em}
+.ip span{display:block;margin-top:6px;font:500 10.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:#6b685f}
+
+
+/* city picker */
+.picker{position:absolute;left:15px;top:236px;width:540px;height:218px;z-index:20;border-radius:16px;background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:10px;display:flex;flex-direction:column;gap:8px;box-shadow:0 0 0 1px rgba(46,45,42,.08)}
+.conts{display:flex;gap:6px;overflow-x:auto;flex:none;padding-bottom:2px;scrollbar-width:none}
+.conts::-webkit-scrollbar{display:none}
+.cbtn{flex:none;border:0;border-radius:8px;background:var(--panel);color:var(--ink);font:500 10px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;padding:8px 10px;cursor:pointer}
+.cbtn[aria-pressed="true"]{background:var(--amber-l)}
+.clist{flex:1;overflow-y:auto;margin:0;padding:0;list-style:none;min-height:0;display:grid;grid-template-columns:1fr 1fr;column-gap:10px;align-content:start}
+.clist .pempty{grid-column:1/-1}
+.clist button{width:100%;text-align:left;border:0;background:transparent;border-radius:8px;padding:7px 8px;display:flex;justify-content:space-between;gap:8px;align-items:baseline;font:400 14.5px/1.2 var(--sans);color:var(--ink);cursor:pointer}
+.clist button:hover,.clist button:focus-visible{background:var(--panel)}
+.clist button[aria-selected="true"]{background:var(--amber-l)}
+.clist small{font:500 10px/1 var(--mono);text-transform:uppercase;letter-spacing:.05em;color:#6b685f;white-space:nowrap}
+.pnote{font:400 11px/1.3 var(--sans);color:#6b685f;flex:none}
+.pempty{padding:10px 8px;color:#6b685f;font-size:14px}
+.loc{display:inline-flex;align-items:center;border:0;background:transparent;padding:0;color:var(--ink);font:400 14.5px/1.2 var(--sans);cursor:pointer;margin-top:6px;border-radius:6px}
+.loc:focus-visible{outline:3px solid var(--pin-v);outline-offset:2px}
+.cc2{margin-left:8px;font:500 10px/1 var(--mono);background:var(--amber-l);border-radius:6px;padding:4px 6px;letter-spacing:.05em}
+
+
+/* below the hero: place guide, plan, packages, booking */
+.cue{left:15px;top:850px;font:500 12px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:#fff;text-shadow:0 1px 8px rgba(10,30,50,.5);text-decoration:none;background:rgba(10,30,50,.28);padding:9px 12px;border-radius:9px}
+.nophoto{left:383px;top:576px;font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;background:var(--card);border-radius:9px;padding:8px 11px;color:var(--ink)}
+.below{background:#E4DED2;padding:56px max(16px,env(safe-area-inset-left,0px)) 0;color:var(--ink)}
+.inner{max-width:1120px;margin:0 auto}
+.sec{padding-bottom:52px}
+.sec h2{margin:0;font:400 clamp(26px,4vw,38px)/1.1 var(--sans);letter-spacing:-.025em}
+.sec .eb{font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;color:#6b685f;margin-bottom:10px}
+.sec .sub{color:#5b5850;margin-top:8px;max-width:60ch;font-size:15px}
+.sechead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.fact{background:var(--card);border-radius:16px;padding:18px;min-width:0}
+.fact .k{font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:#6b685f}
+.fact .v{font:400 19px/1.3 var(--sans);margin-top:10px;overflow-wrap:anywhere}
+.fact .n{font-size:12.5px;color:#6b685f;margin-top:6px}
+.btn2{border:0;border-radius:11px;background:var(--amber);color:var(--ink);font:500 12px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;padding:13px 16px;cursor:pointer}
+.btn2.alt{background:transparent;box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn2:focus-visible{outline:3px solid var(--pin-v);outline-offset:2px}
+.plan{list-style:none;margin:20px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.plan li{background:var(--card);border-radius:16px;padding:18px;min-width:0}
+.plan b{display:block;font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:#B9830B;margin-bottom:10px}
+.plan span{font-size:19px;line-height:1.3;overflow-wrap:anywhere}
+.tr{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
+.pk{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+.pcard{background:var(--card);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.pcard h3{margin:0;font:400 22px/1.1 var(--sans)}
+.pcard .meta{font:500 11px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:#6b685f}
+.pcard .pr{font:400 24px/1 var(--sans);margin:8px 0}
+.form{background:var(--card);border-radius:20px;padding:22px;display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+.form .full{grid-column:1/-1}
+.form label{display:block;font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.form input,.form textarea{width:100%;font:400 16px/1.3 var(--sans);color:var(--ink);background:var(--panel);border:1px solid transparent;border-radius:10px;padding:12px}
+.form input:focus-visible,.form textarea:focus-visible{outline:3px solid var(--amber);outline-offset:1px}
+.fmsg{grid-column:1/-1;background:var(--panel);border-radius:10px;padding:12px;font-size:14px}
+.foot{padding:28px 0 36px;border-top:1px solid rgba(46,45,42,.18);font-size:13px;color:#5b5850;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.ip b.sm{font-size:25px}
+.lbl.ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+@media (max-width:820px){.facts,.plan,.pk{grid-template-columns:1fr}.tr{grid-template-columns:1fr 1fr}.form{grid-template-columns:1fr}.cue,.nophoto{display:none}}
+
+/* phones */
+@media (max-width:820px){
+  body{overflow:auto;background:#E4DED2}
+  .stage{height:auto;overflow:visible}
+  .frame{position:relative;left:auto;top:auto;width:100%;height:auto;margin:0;transform:none}
+  .head{display:block;position:relative;height:62vh;min-height:430px;overflow:hidden;padding:14px 16px;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+  .row1{display:flex;gap:8px;align-items:center}
+  .abs{position:static}
+  .bg{position:absolute;inset:0}
+  .bg video{left:0;width:100%;object-fit:cover}
+  .bg img{object-fit:cover}
+  .head>*:not(.bg){position:relative;z-index:2}
+  .crumbs{white-space:normal;margin-top:8px}
+  h1.title{font-size:clamp(46px,14.5vw,64px);white-space:normal}
+  .chips{flex-wrap:wrap}
+  .chip{font-size:12.5px}
+  .cards{display:flex;flex-direction:column;gap:12px;padding:12px 16px 24px}
+  .card{position:relative;left:auto;top:auto;width:100%}
+  .c-search{height:auto;padding-bottom:16px}
+  .clist{grid-template-columns:1fr}
+  .picker{position:fixed;left:12px;right:12px;top:auto;bottom:12px;width:auto;height:min(62vh,460px);z-index:50;box-shadow:0 10px 40px rgba(10,30,50,.4)}
+  .c-map{height:215px}
+  .c-photo{height:215px}
+  .c-alt{height:215px}
+  .chart{width:calc(100% - 24px)}
+  .c-w,.c-info{height:auto}
+  .c-w{min-height:380px}
+  .c-info{min-height:425px}
+}
+@media (max-width:820px) and (max-height:520px){.head{height:auto;min-height:430px}}
+</style>
+
+<div class="stage"><div class="frame" id="frame">
+  <div class="head">
+    <div class="bg" aria-hidden="true">
+      <img id="plate" src="media/plate.jpg" alt="">
+      <video id="drone" muted loop playsinline preload="auto" poster="media/plate.jpg"></video>
+    </div>
+    <div class="row1">
+      <div class="abs logo" id="a-logo" aria-label="Trail guide"><svg viewBox="0 0 24 24" fill="none" stroke="#2E2D2A" stroke-width="2" stroke-linecap="round"><path d="M12 2.5v19M3.8 7.2l16.4 9.6M3.8 16.8l16.4-9.6"/></svg></div>
+      <div class="abs user" id="a-user"><span class="cc">::</span><b>Synora Holt</b><i class="ring"></i></div>
+    </div>
+    <div class="abs crumbs" id="a-crumbs"><a href="#">Back to Explore</a>  Switzerland / Interlaken / Jungfrau Region /</div>
+    <h1 class="abs title" id="a-title">Lauberhorn Ridge</h1>
+    <div class="abs chips" id="a-chips">
+      <span class="chip"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#F59E0B"/><path d="M10 4.6l1.5 3.2 3.5.4-2.6 2.4.7 3.5L10 12.3l-3.1 1.8.7-3.5L5 8.2l3.5-.4z" fill="#fff"/></svg><span id="chip1t">4.7 (198 Reviews)</span></span>
+      <span class="chip"><svg viewBox="0 0 20 20"><path d="M1.5 16.5L7.5 5l3.6 6.2 2-3L18.5 16.5z" fill="#F59E0B"/></svg><span id="chip2t">Alpine larch forests</span></span>
+    </div>
+  </div>
+
+  <div class="cards">
+    <section class="card c-search" id="a-search">
+      <h2>Hey, Synora!</h2>
+      <button type="button" class="loc" id="locbtn" aria-haspopup="listbox" aria-expanded="false"><span id="loctxt">Interlaken, Switzerland</span>&nbsp;&#708;<span class="cc2" id="loccount">70 places</span></button>
+      <label class="field"><input type="text" id="q" placeholder="Search by anything" aria-label="Search trails"><svg viewBox="0 0 20 20" fill="none" stroke="#2E2D2A" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l5 5"/></svg></label>
+    </section>
+
+    <section class="card c-map" id="a-map">
+      <div class="lbl"><i>::</i>Points of interest</div>
+      <svg class="map" id="mapsvg" viewBox="0 0 358 215" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Topographic map of the route"></svg>
+    </section>
+
+    <section class="card c-photo" id="a-photo">
+      <img src="media/hiker.jpg" alt="Hiker in an orange jacket looking over a larch valley and lake">
+      <div class="bar">
+        <button class="play" type="button" aria-label="Play trail video"><svg viewBox="0 0 14 14"><path d="M1.5 0.5l11 6.5-11 6.5z" fill="#2E2D2A"/></svg></button>
+        <span class="pchip"><svg viewBox="0 0 16 16" fill="none" stroke="#2E2D2A" stroke-width="1.5" stroke-linejoin="round"><rect x="1.5" y="2.5" width="13" height="11" rx="2"/><circle cx="5.5" cy="6.2" r="1.3"/><path d="M2 12l4-3.6 3 2.4 2-1.6 3.5 2.8"/></svg>211 Photos</span>
+      </div>
+    </section>
+
+    <section class="card c-alt" id="a-alt">
+      <div class="top"><div class="lbl"><i>::</i>Altitude</div>
+        <div class="legend"><span>Total gain</span><span><em style="background:var(--amber)"></em>Hike</span><span><em style="background:var(--grey)"></em>Descent</span></div></div>
+      <svg class="chart" id="chart" viewBox="0 0 363 124" aria-label="Altitude profile"></svg>
+      <div class="tabs" role="tablist" id="tabs">
+        <button class="tab" role="tab" type="button" aria-selected="false">Slopes</button>
+        <button class="tab" role="tab" type="button" aria-selected="true"><svg viewBox="0 0 16 16"><path d="M1 13.5L6 4l3 5 2-2.6L15 13.5z" fill="#2E2D2A"/></svg>Altitude</button>
+        <button class="tab" role="tab" type="button" aria-selected="false" data-icon="1"><svg viewBox="0 0 16 16" fill="none" stroke="#2E2D2A" stroke-width="1.4" stroke-linecap="round"><path d="M8 1.5v13M2.4 4.7l11.2 6.6M2.4 11.3l11.2-6.6"/></svg>Seasons</button>
+        <button class="tab" role="tab" type="button" aria-selected="false">Types</button>
+      </div>
+    </section>
+
+    <section class="card c-w" id="a-w">
+      <div class="lbl"><i>::</i>Typical weather</div>
+      <div class="gauge">
+        <svg viewBox="0 0 279 242" aria-hidden="true">
+          <defs><linearGradient id="gg" gradientUnits="userSpaceOnUse" x1="34.5" y1="0" x2="244.5" y2="0"><stop offset="0" stop-color="#E7E1D3"/><stop offset=".5" stop-color="#F8C44C"/><stop offset="1" stop-color="#F6B12A"/></linearGradient></defs>
+          <path d="M34.5 170A105 105 0 0 1 244.5 170" fill="none" stroke="url(#gg)" stroke-width="26" stroke-linecap="round"/>
+          <path id="gprog" pathLength="1" d="M34.5 170A105 105 0 0 1 244.5 170" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-dasharray="1" stroke-dashoffset="0.5"/>
+          <circle cx="34.5" cy="170" r="10" fill="#fff"/><circle cx="244.5" cy="170" r="10" fill="#fff"/>
+        </svg>
+        <div class="pill">Daytime range</div>
+        <div class="temp" id="temp">18&deg;</div>
+        <div class="grow"><span id="g-lo">12&deg;</span><span>Best season</span><span id="g-hi">. 24&deg;</span></div>
+      </div>
+      <div class="tiles">
+        <div class="tile"><div class="t1"><span class="disc" style="background:var(--pin-o)"><svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round"><rect x="1.5" y="2.5" width="9" height="8" rx="1.5"/><path d="M1.5 5h9M4 1v2.5M8 1v2.5"/></svg></span>Best time</div><div class="v" id="tv1">Jun–Sep</div></div>
+        <div class="tile"><div class="t1"><span class="disc" style="background:var(--amber-l)"><svg viewBox="0 0 12 12" fill="none" stroke="#2E2D2A" stroke-width="1.4" stroke-linecap="round"><circle cx="6" cy="6" r="4.5"/><path d="M6 3.5v5M4.4 4.6c.3-.6 1-.8 1.7-.8.9 0 1.5.4 1.5 1 0 1.3-3.2.7-3.2 2 0 .6.7 1 1.6 1 .7 0 1.3-.2 1.6-.8"/></svg></span>Cost</div><div class="v" id="tv2">$$$$</div></div>
+      </div>
+    </section>
+
+    <section class="card c-info" id="a-info">
+      <div class="lbl ell" id="il"><i>::</i>Trail info</div>
+      <div class="ip"><div class="sq" id="sq1"><svg viewBox="0 0 20 20" fill="none" stroke="#B9830B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="4.5" cy="15.5" r="2"/><circle cx="15.5" cy="4.5" r="2"/><path d="M6.5 15.5H12a2.5 2.5 0 0 0 0-5H8a2.5 2.5 0 0 1 0-5h5.5"/></svg></div><div><b id="ib1">6.5 km</b><span id="ic1">Distance</span></div></div>
+      <div class="ip"><div class="sq" id="sq2"><svg viewBox="0 0 20 20" fill="none" stroke="#B9830B" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="10" r="7.5"/><path d="M10 5.5V10l3 2"/></svg></div><div><b id="ib2">2.5-3 hr</b><span id="ic2">Duration</span></div></div>
+      <div class="ip"><div class="sq" id="sq3"><svg viewBox="0 0 20 20" fill="none" stroke="#B9830B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15l5-5 3 3 7-8M12 5h5v5"/></svg></div><div><b id="ib3">350 m</b><span id="ic3">Elevation gain</span></div></div>
+    </section>
+  </div>
+
+  <div class="picker" id="picker" hidden role="dialog" aria-label="Choose a city">
+    <div class="conts" id="conts"></div>
+    <ul class="clist" id="clist" role="listbox" aria-label="Cities"></ul>
+    <div class="pnote">Temperatures, budgets and trail figures are approximate planning ideas. Check current conditions and travel advice before you go.</div>
+  </div>
+  <a class="abs cue" id="a-cue" href="#guide">Scroll for the place guide &darr;</a>
+  <div class="abs nophoto" id="nophoto" hidden>Photo for this place coming soon</div>
+</div></div>
+
+<main class="below" id="below"><div class="inner">
+  <section class="sec" id="guide">
+    <div class="sechead"><div><div class="eb">Place guide</div><h2 id="g-title">Lauberhorn Ridge</h2><p class="sub" id="g-sub"></p></div>
+      <button class="btn2 alt" type="button" id="g-change">Change place</button></div>
+    <div class="facts" id="g-facts"></div>
+  </section>
+  <section class="sec">
+    <div class="eb">Must-see</div><h2>A simple 3-day plan</h2>
+    <ol class="plan" id="g-plan"></ol>
+  </section>
+  <section class="sec" id="g-trailsec">
+    <div class="eb">On foot</div><h2 id="g-trailh">Trail</h2>
+    <p class="sub" id="g-trailsub"></p>
+    <div class="tr" id="g-trail"></div>
+  </section>
+  <section class="sec">
+    <div class="eb">Rahi Tours in India</div><h2>Ready-made packages</h2>
+    <p class="sub">Per-person prices on twin sharing. Sample prices, not a live quote.</p>
+    <div class="pk" id="g-pk"></div>
+  </section>
+  <section class="sec" id="book">
+    <div class="eb">Request a trip</div><h2>Plan this trip with us</h2>
+    <p class="sub">Tell us where and when. This form is a demo, it does not send your details anywhere yet.</p>
+    <form class="form" id="tripform" novalidate>
+      <div><label for="tf-name">Your name</label><input id="tf-name" name="pname" autocomplete="name"></div>
+      <div><label for="tf-phone">Phone</label><input id="tf-phone" name="pphone" inputmode="tel" autocomplete="tel"></div>
+      <div><label for="tf-place">Place or package</label><input id="tf-place" name="pplace" list="tf-list"><datalist id="tf-list"></datalist></div>
+      <div><label for="tf-month">Travel month</label><input id="tf-month" name="pmonth" type="month"></div>
+      <div><label for="tf-n">Travellers</label><input id="tf-n" name="pn" type="number" min="1" max="30" value="2"></div>
+      <div class="full"><label for="tf-note">Anything we should know?</label><textarea id="tf-note" name="pnote" rows="3" placeholder="Budget, kids, special occasion"></textarea></div>
+      <div class="full"><button class="btn2" type="submit">Send request</button></div>
+      <div class="fmsg" id="tf-msg" hidden></div>
+    </form>
+  </section>
+  <div class="foot"><span>Rahi Tours. Sample travel planner. Figures are approximate.</span><span>Place photos: add files to media/places/</span></div>
+</div></main>
+
+<script>
+const $ = (s, r=document) => r.querySelector(s);
+const NS = 'http://www.w3.org/2000/svg';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const frame = $('#frame');
+
+/* scale the 1440x900 frame to cover the viewport */
+function fit(){ frame.style.setProperty('--u', Math.max(innerWidth/1440, innerHeight/900)); }
+addEventListener('resize', fit); fit();
+
+/* ---- topographic map ---- */
+(function(){
+  const svg = $('#mapsvg'); let h = '';
+  for(let i=0;i<16;i++){
+    const y0 = 20 + i*12.6; let d = '';
+    for(let x=-10;x<=370;x+=10){
+      const y = y0 + Math.sin(x*0.034 + i*0.65)*4.5 + Math.cos(x*0.013 + i*1.1)*4 - 20*Math.exp(-Math.pow(x-296,2)/(2*52*52))*(1 - i/22);
+      d += (x===-10?'M':'L') + x + ' ' + y.toFixed(1) + ' ';
+    }
+    h += `<path d="${d}" fill="none" stroke="#c9c5bc" stroke-width="1" stroke-linejoin="round"/>`;
+  }
+  const route = 'M44 178C70 176 96 168 88 154S50 142 70 128 124 128 134 112 170 104 186 112 214 94 230 88 262 82 276 70L304 38L316 60';
+  const pin = (x,y,c) => `<g transform="translate(${x} ${y})"><path d="M0 0C-4 -7 -12 -11 -12 -22A12 12 0 1 1 12 -22C12 -11 4 -7 0 0Z" fill="${c}"/><path d="M-6.5 -18L-2 -26L1.2 -20.5L3.4 -23.6L7 -18Z" fill="#fff"/></g>`;
+  svg.innerHTML = h + `<path id="route" pathLength="1" d="${route}" fill="none" stroke="#2E2D2A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1"/>` +
+    `<g id="pin1">${pin(44,178,'#7C6CF2')}</g><g id="pin2">${pin(304,38,'#F59E0B')}</g>`;
+})();
+
+/* ---- altitude chart ---- */
+(function(){
+  const svg = $('#chart');
+  const hike = 'M8 104C40 102 56 70 82 40S118 22 148 22';
+  const down = 'M148 22C196 22 238 52 354 82';
+  svg.innerHTML =
+   `<line x1="0" y1="106" x2="363" y2="106" stroke="#c9c5bc" stroke-width="1"/>` +
+   `<path id="down" d="${down}" fill="none" stroke="#B3AEA3" stroke-width="3" stroke-linecap="round" stroke-dasharray="0.1 7"/>` +
+   `<g id="dots"></g>` +
+   `<path id="hike" pathLength="1" d="${hike}" fill="none" stroke="#2E2D2A" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="1"/>` +
+   `<circle cx="148" cy="22" r="5.5" fill="#fff" stroke="#2E2D2A" stroke-width="2.5" id="peak"/>` +
+   `<g font-family="JetBrains Mono, monospace" font-weight="500" font-size="9.5" fill="#2E2D2A" letter-spacing=".5">` +
+   `<text x="0" y="121">0 KM</text><text x="168" y="121" text-anchor="middle">1,25 KM</text><text x="160" y="12">2,800 M</text></g>`;
+  const p = $('#down'), L = p.getTotalLength(), g = $('#dots');
+  [0.28,0.6,0.93].forEach(f => { const pt = p.getPointAtLength(L*f); const c = document.createElementNS(NS,'circle'); c.setAttribute('cx',pt.x); c.setAttribute('cy',pt.y); c.setAttribute('r',5); c.setAttribute('fill','#F6B733'); c.setAttribute('stroke','#fff'); c.setAttribute('stroke-width',2); g.appendChild(c); });
+})();
+
+/* tabs */
+$('#tabs').addEventListener('click', e => {
+  const t = e.target.closest('.tab'); if(!t) return;
+  document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', x === t ? 'true' : 'false'));
+});
+
+/* ---- drone video: fade in once the first frame is ready ---- */
+if(!reduce){
+  const v = $('#drone');
+  v.addEventListener('loadeddata', () => { droneReady = true; if(!pick.sel || pick.sel.home || $('#nophoto').hidden === false){ v.classList.add('on'); v.play().catch(()=>{}); } }, {once:true});
+  v.src = 'media/drone.mp4';
+}
+
+/* ---- entrance timeline (about 2.8s) ---- */
+function enter(){
+  if(reduce) return;
+  const E = 'cubic-bezier(.2,.7,.2,1)';
+  const a = (sel, kf, delay, dur) => { const el = $(sel); if(el) el.animate(kf, {delay, duration:dur, easing:E, fill:'backwards'}); };
+  a('#a-logo', [{opacity:0,transform:'translateY(-16px)'},{opacity:1,transform:'none'}], 0, 700);
+  a('#a-user', [{opacity:0,transform:'translateY(-16px)'},{opacity:1,transform:'none'}], 100, 700);
+  a('#a-crumbs', [{opacity:0},{opacity:1}], 300, 700);
+  a('#a-title', [{opacity:0,transform:'translateY(26px)',filter:'blur(10px)'},{opacity:1,transform:'none',filter:'blur(0)'}], 450, 1000);
+  document.querySelectorAll('#a-chips .chip').forEach((c,i) => c.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}], {delay:850+i*120, duration:700, easing:E, fill:'backwards'}));
+  a('#a-w',    [{opacity:0,transform:'translateX(70px)'},{opacity:1,transform:'none'}], 900, 800);
+  a('#a-info', [{opacity:0,transform:'translateX(70px)'},{opacity:1,transform:'none'}], 1050, 800);
+  [['#a-search',1300],['#a-map',1450],['#a-photo',1600],['#a-alt',1750]].forEach(([s,d]) => a(s, [{opacity:0,transform:'translateY(46px)'},{opacity:1,transform:'none'}], d, 800));
+  const draw = (sel, from, to, delay, dur) => { const el = $(sel); el.animate([{strokeDashoffset:from},{strokeDashoffset:to}], {delay, duration:dur, easing:'ease-in-out', fill:'backwards'}); };
+  draw('#gprog', 1, 0.5, 1200, 1400);
+  draw('#route', 1, 0, 1700, 1500);
+  draw('#hike', 1, 0, 1850, 1300);
+  ['#pin1','#pin2'].forEach((s,i) => $(s).animate([{opacity:0},{opacity:1}], {delay:1900+i*1200, duration:400, fill:'backwards'}));
+  $('#dots').animate([{opacity:0},{opacity:1}], {delay:2700, duration:300, fill:'backwards'});
+  $('#peak').animate([{opacity:0},{opacity:1}], {delay:3100, duration:200, fill:'backwards'});
+  /* temperature counts up */
+  const t = $('#temp'), start = performance.now() + 1200, dur = 1400;
+  t.innerHTML = '0&deg;';
+  (function tick(now){
+    const k = Math.min(1, Math.max(0, (now - start) / dur));
+    t.innerHTML = Math.round((pick.mid || 18) * (1 - Math.pow(1 - k, 3))) + '&deg;';
+    if(k < 1) requestAnimationFrame(tick);
+  })(performance.now());
+}
+
+/* ---- city picker: 50 well-known travel cities (my own curated list, not an official ranking) + the Interlaken trail ---- */
+const COST = {1:'$25-60', 2:'$60-120', 3:'$120-200', 4:'$200-300'};
+const slug = n => n.toLowerCase().replace(/\(.*?\)/g,'').trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const HOME = {city:'Interlaken', country:'Switzerland', cont:'Europe', region:'Jungfrau Region', title:'Lauberhorn Ridge', c1:'4.7 (198 Reviews)', c2:'Alpine larch forests', home:true,
+  best:'Jun–Sep', lo:12, hi:24, cost:4, stay:'3–4 days', air:'Zurich or Bern Airport, then about 2–2.5 hours by train', see:['Harder Kulm viewpoint','Lake Brienz boat ride','Lauterbrunnen waterfalls'], tip:'A Swiss Travel Pass or Half Fare card can save money if you ride many trains and lifts.', trail:['Lauberhorn Ridge (sample)',6.5,'2.5–3 hr',350]};
+/* [city, country, group, region, highlight, best time, low C, high C, cost tier, stay, getting there, sights, tip, trail] */
+const RAW = [["Tokyo", "Japan", "Asia", "Kanto", "Neon nights and old temples", "Mar–May, Oct–Nov", 14, 24, 3, "5–7 days", "Haneda or Narita airports", ["Senso-ji in Asakusa", "Shibuya Crossing", "Meiji Shrine"], "Get an IC card (Suica or Pasmo) for trains and buses.", null], ["Kyoto", "Japan", "Asia", "Kansai", "Temples, tea houses and torii gates", "Mar–Apr, Nov", 13, 22, 3, "3–4 days", "Kansai Airport, then about 75 minutes by train", ["Fushimi Inari shrine", "Kinkaku-ji (Golden Pavilion)", "Arashiyama bamboo grove"], "Visit Fushimi Inari early in the morning to avoid the crowds.", ["Fushimi Inari summit path", 4, "about 2 hr", 230]], ["Osaka", "Japan", "Asia", "Kansai", "Street food and Osaka Castle", "Mar–May, Oct–Nov", 14, 24, 3, "2–3 days", "Kansai International Airport", ["Osaka Castle", "Dotonbori food street", "Shinsekai district"], "Try takoyaki and okonomiyaki in Dotonbori.", null], ["Seoul", "South Korea", "Asia", "Seoul Capital Area", "Palaces, markets and K-culture", "Apr–Jun, Sep–Nov", 12, 24, 3, "4–5 days", "Incheon Airport, about an hour by train", ["Gyeongbokgung Palace", "Bukchon Hanok Village", "Namsan Seoul Tower"], "Get a T-money card for the subway and buses.", null], ["Bangkok", "Thailand", "Asia", "Central Thailand", "Temples, canals and street food", "Nov–Feb", 26, 33, 2, "3–4 days", "Suvarnabhumi or Don Mueang airports", ["Grand Palace and Wat Pho", "Chao Phraya river boats", "Chatuchak Weekend Market"], "Dress modestly for temples and use river boats to skip the traffic.", null], ["Phuket", "Thailand", "Asia", "Andaman Coast", "Andaman beaches and island hopping", "Nov–Apr", 27, 33, 2, "4–6 days", "Phuket International Airport", ["Phi Phi Islands boat trip", "Big Buddha", "Old Phuket Town"], "Obey red flags on west-coast beaches in the monsoon months (May–Oct).", null], ["Singapore", "Singapore", "Asia", "Central Region", "Gardens by the Bay and hawker food", "Feb–Apr", 25, 32, 3, "3–4 days", "Changi Airport, then the MRT train", ["Gardens by the Bay", "Marina Bay waterfront", "Hawker centres such as Maxwell"], "Carry a small umbrella, showers can happen any month.", null], ["Kuala Lumpur", "Malaysia", "Asia", "Federal Territory", "Petronas Towers and night markets", "May–Jul", 26, 33, 2, "2–3 days", "KLIA, then the express train to KL Sentral", ["Petronas Twin Towers", "Batu Caves", "Jalan Alor street food"], "Use ride apps or rail, traffic is heavy at peak hours.", null], ["Bali (Denpasar)", "Indonesia", "Asia", "Bali", "Rice terraces, temples and surf", "Apr–Oct", 27, 31, 2, "5–7 days", "Ngurah Rai Airport (Denpasar)", ["Ubud rice terraces", "Uluwatu temple", "Tanah Lot sunset"], "Wear a sarong at temples and hire a driver for day trips.", null], ["Hanoi", "Vietnam", "Asia", "Red River Delta", "Old Quarter and Ha Long Bay trips", "Oct–Apr", 18, 26, 1, "3 days", "Noi Bai Airport", ["Old Quarter streets", "Temple of Literature", "Ha Long Bay trip"], "Cross roads slowly and steadily, traffic flows around you.", null], ["Hong Kong", "China", "Asia", "Hong Kong SAR", "Victoria Peak and harbour skyline", "Oct–Dec", 20, 26, 3, "3–4 days", "Hong Kong International, Airport Express about 24 minutes", ["Victoria Peak", "Star Ferry across the harbour", "Tian Tan Buddha on Lantau"], "Use an Octopus card on trains, buses and ferries.", ["Dragon's Back", 8.5, "about 3 hr", 300]], ["Dubai", "UAE", "Asia", "Emirate of Dubai", "Burj Khalifa and desert safaris", "Nov–Mar", 24, 31, 3, "3–4 days", "Dubai International Airport (DXB)", ["Burj Khalifa observation deck", "Old Dubai souks and the creek", "Desert safari"], "Summer midday heat is extreme, plan outdoor time for early morning or evening.", null], ["Delhi", "India", "Asia", "NCT of Delhi", "Red Fort and Old Delhi bazaars", "Oct–Mar", 15, 26, 1, "3–4 days", "Indira Gandhi International Airport, Airport Metro line", ["Red Fort", "Humayun’s Tomb", "Chandni Chowk food walk"], "Check air quality in Nov–Jan and carry a mask if it is poor.", null], ["Jaipur", "India", "Asia", "Rajasthan", "Amber Fort and Pink City bazaars", "Oct–Mar", 15, 28, 1, "2–3 days", "Jaipur Airport, or about 5 hours by road from Delhi", ["Amber Fort", "City Palace", "Hawa Mahal"], "Start at Amber Fort early to beat the heat and crowds.", null], ["Mumbai", "India", "Asia", "Maharashtra", "Gateway of India and Marine Drive", "Nov–Feb", 20, 32, 2, "3 days", "Chhatrapati Shivaji Maharaj International Airport", ["Gateway of India", "Marine Drive at sunset", "Elephanta Caves ferry"], "Avoid peak monsoon (Jul–Aug) for sightseeing.", null], ["Paris", "France", "Europe", "Ile-de-France", "Eiffel Tower and Seine walks", "Apr–Jun, Sep–Oct", 12, 22, 4, "4–5 days", "Charles de Gaulle or Orly airports", ["Eiffel Tower", "Louvre Museum", "Montmartre and Sacre-Coeur"], "Book Louvre and Eiffel Tower tickets online in advance.", null], ["London", "United Kingdom", "Europe", "England", "Museums, markets and royal parks", "May–Sep", 14, 23, 4, "4–5 days", "Heathrow, Gatwick or Stansted airports", ["British Museum", "Tower of London", "Borough Market"], "Many top museums are free, and a contactless card works on the Tube.", null], ["Rome", "Italy", "Europe", "Lazio", "Colosseum and Vatican City", "Apr–Jun, Sep–Oct", 16, 26, 3, "3–4 days", "Fiumicino Airport, train to the city about 30 minutes", ["Colosseum and Roman Forum", "Vatican Museums and St Peter’s", "Trevi Fountain"], "Book Colosseum and Vatican entry in advance.", null], ["Venice", "Italy", "Europe", "Veneto", "Canals, bridges and lagoon islands", "Apr–Jun, Sep–Oct", 15, 25, 4, "2–3 days", "Marco Polo Airport, then a water bus", ["St Mark’s Square", "Rialto Bridge", "Murano and Burano islands"], "Staying on the mainland (Mestre) is much cheaper.", null], ["Florence", "Italy", "Europe", "Tuscany", "Renaissance art and Duomo views", "Apr–Jun, Sep–Oct", 17, 26, 3, "2–3 days", "Florence Airport, or Pisa Airport plus a train", ["Duomo and the dome climb", "Uffizi Gallery", "Ponte Vecchio and Oltrarno"], "Reserve Uffizi and Duomo dome slots early.", null], ["Barcelona", "Spain", "Europe", "Catalonia", "Gaudi architecture and beaches", "May–Jun, Sep–Oct", 18, 26, 3, "3–4 days", "El Prat Airport", ["Sagrada Familia", "Park Guell", "Gothic Quarter"], "Watch for pickpockets around Las Ramblas.", null], ["Madrid", "Spain", "Europe", "Community of Madrid", "Prado Museum and tapas streets", "Mar–May, Sep–Nov", 15, 26, 3, "3 days", "Barajas Airport, then the metro", ["Prado Museum", "Retiro Park", "Plaza Mayor and tapas bars"], "Dinner starts late, usually after 9 pm.", null], ["Lisbon", "Portugal", "Europe", "Lisbon Region", "Tram rides and hilltop viewpoints", "Mar–Jun, Sep–Oct", 17, 25, 2, "3–4 days", "Humberto Delgado Airport, then the metro", ["Belem Tower", "Alfama and Tram 28", "Sintra day trip"], "Wear shoes with grip, the stone streets are steep and slippery.", null], ["Amsterdam", "Netherlands", "Europe", "North Holland", "Canals, cycling and museums", "Apr–Sep", 12, 22, 4, "2–3 days", "Schiphol Airport, train to the centre about 20 minutes", ["Rijksmuseum", "Canal cruise", "Vondelpark and the Jordaan"], "Stay out of the bike lanes, cyclists move fast.", null], ["Prague", "Czechia", "Europe", "Bohemia", "Old Town Square and Charles Bridge", "Apr–Jun, Sep–Oct", 13, 23, 2, "3 days", "Vaclav Havel Airport", ["Charles Bridge", "Prague Castle", "Old Town Square"], "Walk across Charles Bridge at sunrise for empty views.", null], ["Vienna", "Austria", "Europe", "Vienna", "Palaces, coffee houses and opera", "Apr–Jun, Sep–Oct", 13, 23, 3, "3 days", "Vienna Airport, train to the centre about 15–25 minutes", ["Schonbrunn Palace", "Hofburg Palace", "Naschmarkt"], "Spend an afternoon in a classic Viennese coffee house.", null], ["Budapest", "Hungary", "Europe", "Central Hungary", "Thermal baths and Danube views", "Apr–Jun, Sep–Oct", 14, 24, 2, "3 days", "Budapest Airport", ["Buda Castle", "Parliament building", "Szechenyi thermal baths"], "Bring swimwear and a towel for the thermal baths.", null], ["Berlin", "Germany", "Europe", "Berlin", "History, street art and nightlife", "May–Sep", 16, 25, 3, "3–4 days", "Berlin Brandenburg Airport", ["Brandenburg Gate", "Museum Island", "East Side Gallery"], "Many museums are closed on Mondays.", null], ["Athens", "Greece", "Europe", "Attica", "Acropolis and old Plaka lanes", "Apr–Jun, Sep–Oct", 18, 28, 2, "3 days", "Athens Airport, then the metro", ["Acropolis and Parthenon", "Plaka neighbourhood", "Temple of Olympian Zeus"], "Visit the Acropolis at opening time to avoid the midday heat.", null], ["Istanbul", "Turkiye", "Europe", "Marmara", "Hagia Sophia and Bosphorus ferries", "Apr–Jun, Sep–Nov", 15, 25, 2, "4 days", "Istanbul Airport or Sabiha Gokcen Airport", ["Hagia Sophia", "Blue Mosque", "Bosphorus ferry ride"], "Cover shoulders and carry a scarf for mosque visits.", null], ["Cairo", "Egypt", "Africa", "Greater Cairo", "Pyramids of Giza and Islamic Cairo", "Oct–Apr", 18, 28, 1, "3–4 days", "Cairo International Airport", ["Pyramids of Giza", "Egyptian Museum", "Khan el-Khalili bazaar"], "Agree prices with taxis and guides before you start.", null], ["Marrakech", "Morocco", "Africa", "Marrakech-Safi", "Medina souks and Jemaa el-Fna", "Mar–May, Oct–Nov", 18, 28, 1, "3 days", "Menara Airport", ["Jemaa el-Fna square", "Bahia Palace", "Majorelle Garden"], "Bargain politely in the souks and consider a licensed guide for the medina.", null], ["Cape Town", "South Africa", "Africa", "Western Cape", "Table Mountain and Cape Peninsula", "Nov–Mar", 22, 28, 2, "4–5 days", "Cape Town International Airport", ["Table Mountain", "Cape of Good Hope", "Boulders Beach penguins"], "Check cable car and wind conditions before going up Table Mountain.", ["Platteklip Gorge, Table Mountain", 3, "2–3 hr", 700]], ["New York", "USA", "North America", "New York State", "Central Park and Manhattan skyline", "Apr–Jun, Sep–Nov", 13, 24, 4, "4–5 days", "JFK, LaGuardia or Newark airports", ["Central Park", "Statue of Liberty ferry", "Brooklyn Bridge walk"], "The subway with tap-to-pay is the cheapest way around.", null], ["Los Angeles", "USA", "North America", "California", "Beaches, studios and Griffith views", "Mar–May, Sep–Nov", 20, 28, 3, "4–5 days", "Los Angeles International Airport (LAX)", ["Santa Monica Pier", "Griffith Observatory", "Hollywood Walk of Fame"], "Distances are big, plan on a car or ride app.", null], ["Las Vegas", "USA", "North America", "Nevada", "The Strip and desert day trips", "Mar–May, Oct–Nov", 22, 32, 3, "3 days", "Harry Reid International Airport", ["The Strip", "Fremont Street", "Red Rock Canyon day trip"], "Summer afternoons are extremely hot, drink plenty of water.", null], ["San Francisco", "USA", "North America", "California", "Golden Gate and cable cars", "Sep–Nov", 16, 24, 4, "3–4 days", "San Francisco International Airport (SFO)", ["Golden Gate Bridge", "Alcatraz Island", "Cable car ride"], "Carry a jacket, even summers can be foggy and cool.", null], ["Miami", "USA", "North America", "Florida", "South Beach and Art Deco streets", "Nov–Apr", 24, 28, 3, "3–5 days", "Miami International Airport", ["South Beach", "Art Deco Historic District", "Wynwood Walls"], "Hurricane season runs from June to November.", null], ["Mexico City", "Mexico", "North America", "CDMX", "Historic centre and Frida Kahlo museum", "Mar–May, Oct–Nov", 18, 26, 2, "4 days", "Benito Juarez International Airport", ["Zocalo and Templo Mayor", "Frida Kahlo Museum", "Teotihuacan pyramids"], "The city sits at about 2,240 m, so go easy on day one.", null], ["Cancun", "Mexico", "North America", "Quintana Roo", "Caribbean beaches and Mayan ruins", "Dec–Apr", 26, 30, 3, "4–6 days", "Cancun International Airport", ["Chichen Itza day trip", "Isla Mujeres", "Cenote swim"], "Seaweed (sargassum) can affect some beaches in spring and summer.", null], ["Toronto", "Canada", "North America", "Ontario", "CN Tower and Niagara day trips", "Jun–Sep", 20, 27, 3, "3 days", "Pearson Airport, then the UP Express train", ["CN Tower", "Niagara Falls day trip", "Kensington Market"], "Winters are very cold, summer is best for outdoor sights.", null], ["Vancouver", "Canada", "North America", "British Columbia", "Mountains, seawall and Stanley Park", "Jun–Sep", 18, 24, 3, "3–4 days", "Vancouver International Airport", ["Stanley Park Seawall", "Capilano Suspension Bridge", "Granville Island"], "Winter is rainy, pack a waterproof jacket.", ["Grouse Grind", 2.9, "1.5–2 hr", 850]], ["Montreal", "Canada", "North America", "Quebec", "Old Montreal and cafe culture", "Jun–Sep", 20, 26, 3, "3 days", "Trudeau Airport", ["Old Montreal", "Mount Royal Park", "Jean-Talon Market"], "French is the main language, a few words go a long way.", null], ["Rio de Janeiro", "Brazil", "South America", "Rio de Janeiro State", "Christ the Redeemer and Copacabana", "Apr–Jun, Sep–Oct", 24, 28, 2, "4–5 days", "Galeao International Airport", ["Christ the Redeemer", "Sugarloaf Mountain", "Copacabana and Ipanema beaches"], "Keep phones and valuables out of sight on the beach.", null], ["Buenos Aires", "Argentina", "South America", "Buenos Aires", "Tango, steak and Recoleta", "Mar–May, Sep–Nov", 17, 25, 2, "4 days", "Ezeiza International Airport", ["Recoleta Cemetery", "La Boca", "San Telmo market"], "Dinner is late, often after 9 pm.", null], ["Cusco", "Peru", "South America", "Cusco Region", "Gateway to Machu Picchu", "May–Sep", 18, 21, 2, "3 days, plus Machu Picchu", "Cusco Airport", ["Plaza de Armas", "Sacsayhuaman", "Sacred Valley and Machu Picchu"], "Rest on arrival, the city is at about 3,400 m and altitude sickness is common.", ["Classic Inca Trail", 43, "4 days", null]], ["Ushuaia", "Argentina", "South America", "Tierra del Fuego", "Gateway to Antarctica cruises", "Dec–Mar", 8, 16, 3, "3–4 days, before a cruise", "Ushuaia Airport", ["Tierra del Fuego National Park", "Beagle Channel cruise", "End of the World Train"], "Antarctic cruises run roughly November to March, book months ahead.", null], ["Sydney", "Australia", "Oceania", "New South Wales", "Opera House and harbour ferries", "Sep–Nov, Mar–May", 18, 26, 3, "4 days", "Kingsford Smith Airport", ["Sydney Opera House", "Harbour Bridge", "Bondi to Coogee coastal walk"], "Ferries are a cheap way to see the harbour.", ["Bondi to Coogee coastal walk", 6, "about 2 hr", 100]], ["Melbourne", "Australia", "Oceania", "Victoria", "Laneway cafes and the Great Ocean Road", "Mar–May", 15, 24, 3, "3–4 days", "Tullamarine Airport", ["Laneways and cafes", "Great Ocean Road trip", "Queen Victoria Market"], "Weather can change fast, carry layers.", null], ["Auckland", "New Zealand", "Oceania", "Auckland Region", "Harbour islands and volcanic cones", "Dec–Mar", 20, 25, 3, "3–4 days", "Auckland Airport", ["Sky Tower", "Rangitoto Island", "Waiheke Island"], "Ferries make the nearby islands an easy day trip.", null], ["Islamabad", "Pakistan", "Pakistan", "Islamabad Capital Territory", "Faisal Mosque and Margalla Hills", "Mar–Apr, Oct–Nov", 18, 30, 1, "2–3 days", "Islamabad International Airport", ["Faisal Mosque", "Margalla Hills viewpoints", "Daman-e-Koh"], "Use it as a base for Murree, Swat and the north.", null], ["Karachi", "Pakistan", "Pakistan", "Sindh", "Clifton Beach and Mohatta Palace", "Nov–Feb", 20, 28, 1, "2–3 days", "Jinnah International Airport", ["Quaid-e-Azam Mausoleum", "Clifton Beach", "Mohatta Palace"], "Plan outdoor sightseeing for mornings and evenings.", null], ["Lahore", "Pakistan", "Pakistan", "Punjab", "Badshahi Mosque and Walled City food", "Oct–Mar", 16, 28, 1, "3 days", "Allama Iqbal International Airport", ["Badshahi Mosque", "Lahore Fort", "Walled City and Food Street"], "Eat in the Walled City in the evening when the streets come alive.", null], ["Faisalabad", "Pakistan", "Pakistan", "Punjab", "Clock Tower and textile bazaars", "Oct–Mar", 15, 28, 1, "1–2 days", "Faisalabad Airport, or the motorway from Lahore", ["Clock Tower (Ghanta Ghar) and its bazaars", "Lyallpur Museum", "Jinnah Garden"], "Visit the textile markets in the morning.", null], ["Multan", "Pakistan", "Pakistan", "Punjab", "Shrines and blue-tile heritage", "Oct–Mar", 18, 28, 1, "2 days", "Multan International Airport", ["Shrine of Shah Rukn-e-Alam", "Shrine of Bahauddin Zakariya", "Hussain Agahi Bazaar"], "Summers are very hot, visit in winter.", null], ["Murree", "Pakistan", "Pakistan", "Punjab", "Pine hill station near Islamabad", "Apr–Jun, Dec–Feb", 8, 20, 1, "1–2 days", "Islamabad, then about 1.5–2 hours by road", ["Mall Road", "Patriata (New Murree) chairlift", "Pindi Point"], "Check road and weather updates before travelling in winter.", null], ["Peshawar", "Pakistan", "Pakistan", "Khyber Pakhtunkhwa", "Qissa Khwani Bazaar and Bala Hisar", "Oct–Mar", 15, 26, 1, "2 days", "Bacha Khan International Airport", ["Qissa Khwani Bazaar", "Peshawar Museum", "Mahabat Khan Mosque"], "Check current travel advice before you go.", null], ["Swat Valley", "Pakistan", "Pakistan", "Khyber Pakhtunkhwa", "Kalam meadows and Malam Jabba", "Apr–Jun, Sep–Oct", 15, 28, 1, "3–4 days", "Islamabad, then about 5–6 hours by road", ["Kalam valley", "Malam Jabba", "Mahodand Lake"], "Roads beyond Kalam can be rough, hire a local driver.", null], ["Naran", "Pakistan", "Pakistan", "Khyber Pakhtunkhwa", "Saif-ul-Malook Lake", "Jun–Sep", 10, 22, 1, "2–3 days", "Islamabad, then about 7–8 hours by road", ["Saif-ul-Malook Lake", "Lalazar", "Babusar Pass (summer only)"], "The road is open mainly in summer, check conditions before starting.", null], ["Kaghan Valley", "Pakistan", "Pakistan", "Khyber Pakhtunkhwa", "Lulusar Lake and Babusar Pass", "Jun–Sep", 10, 22, 1, "3 days", "Islamabad, then about 6–8 hours by road", ["Shogran and Siri Paye", "Lulusar Lake", "Babusar Top"], "Carry warm clothes, nights are cold even in summer.", null], ["Chitral", "Pakistan", "Pakistan", "Khyber Pakhtunkhwa", "Kalash valleys and Tirich Mir views", "Apr–Oct", 15, 28, 1, "4 days", "Flights to Chitral depend on weather, or go by road", ["Kalash valleys (Bumburet, Rumbur, Birir)", "Chitral Fort and Shahi Mosque", "Shandur Pass"], "Respect local customs and ask before photographing people.", null], ["Gilgit", "Pakistan", "Pakistan", "Gilgit-Baltistan", "Gateway to the Karakoram", "Apr–Oct", 15, 28, 1, "2–3 days", "Gilgit flights depend on weather, or take the Karakoram Highway", ["Kargah Buddha carving", "Gilgit river bridges", "Naltar Valley"], "Karakoram Highway journeys are long, plan spare days.", null], ["Hunza (Karimabad)", "Pakistan", "Pakistan", "Gilgit-Baltistan", "Baltit Fort and Attabad Lake", "Apr–Oct", 12, 26, 1, "3–4 days", "Gilgit, then about 2–3 hours by road", ["Baltit Fort", "Attabad Lake", "Passu Cones and Hussaini Bridge"], "Visit in late April for blossom or October for autumn colours.", null], ["Skardu", "Pakistan", "Pakistan", "Gilgit-Baltistan", "Shangrila Lake and Deosai Plains", "May–Sep", 12, 26, 1, "3–4 days", "Skardu flights depend on weather, or take the Karakoram Highway", ["Shangrila Lake (Lower Kachura)", "Deosai National Park (summer only)", "Kharpocho Fort"], "Deosai is open mainly in summer, snow blocks it the rest of the year.", null], ["Fairy Meadows", "Pakistan", "Pakistan", "Gilgit-Baltistan", "Nanga Parbat views", "Jun–Sep", 8, 18, 1, "2 days", "Karakoram Highway to Raikot Bridge, then a jeep and a hike", ["Nanga Parbat viewpoint", "Beyal Camp", "Raikot Glacier"], "The hike from Tato takes roughly 3–4 hours, start early.", ["Tato to Fairy Meadows trek", null, "3–4 hr", null]], ["Muzaffarabad", "Pakistan", "Pakistan", "Azad Jammu and Kashmir", "Red Fort and Neelum river", "Mar–May, Sep–Nov", 18, 30, 1, "2 days", "Islamabad, then about 3–4 hours by road", ["Red Fort (Muzaffarabad Fort)", "Neelum and Jhelum confluence", "Pir Chinasi"], "Check road conditions after heavy rain.", null], ["Neelum Valley", "Pakistan", "Pakistan", "Azad Jammu and Kashmir", "Keran, Sharda and Arang Kel", "May–Sep", 12, 26, 1, "3–4 days", "Muzaffarabad, then about 4–6 hours by road", ["Keran", "Sharda", "Arang Kel"], "Check access and any permits needed near the border areas.", null], ["Quetta", "Pakistan", "Pakistan", "Balochistan", "Hanna Lake and fruit orchards", "Mar–Jun, Sep–Oct", 14, 28, 1, "2 days", "Quetta Airport", ["Hanna Lake", "Hazarganji Chiltan National Park", "Bazaars and dry fruit"], "Check current travel advice and arrange local guides.", null], ["Gwadar", "Pakistan", "Pakistan", "Balochistan", "Coastal drives and Hammerhead peninsula", "Nov–Mar", 24, 30, 1, "2 days", "Gwadar Airport, or the Makran Coastal Highway", ["Hammerhead peninsula", "Gwadar beaches", "Makran Coastal Highway views"], "Check current travel advice and carry water for long drives.", null]];
+const CITIES = [HOME, ...RAW.map(r => ({city:r[0], country:r[1], cont:r[2], region:r[3], title:r[0], c1:(r[2]==='Pakistan'?'Local trip':r[2]), c2:r[4], best:r[5], lo:r[6], hi:r[7], cost:r[8], stay:r[9], air:r[10], see:r[11], tip:r[12], trail:r[13]}))];
+/* the place shown when the page first opens: any city name from the list, e.g. 'Islamabad' or 'Interlaken' */
+const DEFAULT_PLACE = 'Hunza (Karimabad)';
+const CONTS = ['All','Pakistan','Asia','Europe','Africa','North America','South America','Oceania'];
+let pick = {cont:'All', q:'', sel:CITIES[0]};
+const picker = $('#picker'), locbtn = $('#locbtn'), qin = $('#q');
+$('#loccount').textContent = CITIES.length + ' places';
+const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function visible(){
+  const q = pick.q.trim().toLowerCase();
+  return CITIES.filter(c => (pick.cont==='All' || c.cont===pick.cont) && (!q || (c.city+' '+c.country+' '+c.cont).toLowerCase().includes(q)));
+}
+function drawPicker(){
+  $('#conts').innerHTML = CONTS.map(c => `<button type="button" class="cbtn" data-c="${c}" aria-pressed="${c===pick.cont}">${c}</button>`).join('');
+  const l = visible();
+  $('#clist').innerHTML = l.length ? l.map(c => `<li><button type="button" role="option" data-city="${esc(c.city)}" aria-selected="${c===pick.sel}">${esc(c.city)}<small>${esc(c.country)}</small></button></li>`).join('') : '<li class="pempty">No city matches. Try another name.</li>';
+}
+function openPicker(){ picker.hidden = false; locbtn.setAttribute('aria-expanded','true'); drawPicker(); }
+function closePicker(){ picker.hidden = true; locbtn.setAttribute('aria-expanded','false'); }
+function choose(c, initial){
+  pick.sel = c; pick.q = ''; qin.value = '';
+  $('#loctxt').textContent = c.city + ', ' + c.country;
+  $('#a-crumbs').innerHTML = '<a href="#">Back to Explore</a>  ' + esc(c.country) + ' / ' + esc(c.city) + ' / ' + esc(c.region) + ' /';
+  $('#a-title').textContent = c.title;
+  $('#chip1t').textContent = c.c1; $('#chip2t').textContent = c.c2;
+  document.title = c.title;
+  applyPlace(c, initial);
+  if(!reduce && !initial) $('#a-title').animate([{opacity:0,transform:'translateY(14px)',filter:'blur(6px)'},{opacity:1,transform:'none',filter:'blur(0)'}], {duration:500, easing:'cubic-bezier(.2,.7,.2,1)'});
+  closePicker();
+}
+locbtn.addEventListener('click', () => picker.hidden ? openPicker() : closePicker());
+qin.addEventListener('input', () => { pick.q = qin.value; pick.cont = 'All'; if(picker.hidden) openPicker(); else drawPicker(); });
+qin.addEventListener('keydown', e => { if(e.key==='Enter'){ const l = visible(); if(l[0]) choose(l[0]); } });
+picker.addEventListener('click', e => {
+  const cb = e.target.closest('.cbtn'); if(cb){ pick.cont = cb.dataset.c; drawPicker(); return; }
+  const b = e.target.closest('[data-city]'); if(b){ choose(CITIES.find(c => c.city === b.dataset.city)); }
+});
+document.addEventListener('keydown', e => { if(e.key==='Escape' && !picker.hidden){ closePicker(); locbtn.focus(); } });
+document.addEventListener('pointerdown', e => { if(!picker.hidden && !e.target.closest('#picker, #locbtn, #q, .field')) closePicker(); });
+
+/* ---- apply a place to the dashboard cards and the guide below ---- */
+const ICONS = {
+  route:'<circle cx="4.5" cy="15.5" r="2"/><circle cx="15.5" cy="4.5" r="2"/><path d="M6.5 15.5H12a2.5 2.5 0 0 0 0-5H8a2.5 2.5 0 0 1 0-5h5.5"/>',
+  clock:'<circle cx="10" cy="10" r="7.5"/><path d="M10 5.5V10l3 2"/>',
+  trend:'<path d="M2 15l5-5 3 3 7-8M12 5h5v5"/>',
+  wallet:'<rect x="2.5" y="5" width="15" height="11" rx="2.5"/><path d="M13 10.5h4.5v3H13a1.5 1.5 0 0 1 0-3zM4.5 5l9-2.5"/>',
+  bed:'<path d="M2.5 15.5v-8M2.5 12h15v3.5M17.5 12V9.5a2 2 0 0 0-2-2H9v4.5"/><circle cx="6" cy="9.5" r="1.6"/>',
+  cal:'<rect x="3" y="4.5" width="14" height="12.5" rx="2"/><path d="M3 8.5h14M7 2.5v3M13 2.5v3"/>'
+};
+function setIP(n, icon, val, cap){
+  $('#sq'+n+' svg').innerHTML = ICONS[icon];
+  const b = $('#ib'+n); b.textContent = val; b.classList.toggle('sm', String(val).length > 9);
+  $('#ic'+n).textContent = cap;
+}
+function countTo(el, to, ms){
+  if(reduce){ el.innerHTML = to + '&deg;'; return; }
+  const from = parseInt(el.textContent) || 0, t0 = performance.now();
+  (function tick(now){ const k = Math.min(1, (now - t0) / ms); el.innerHTML = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3))) + '&deg;'; if(k < 1) requestAnimationFrame(tick); })(t0);
+}
+let droneReady = false;
+function applyPhoto(c){
+  const plate = $('#plate'), drone = $('#drone'), hk = $('#a-photo img'), np = $('#nophoto');
+  const back = () => { plate.src = 'media/plate.jpg'; hk.src = 'media/hiker.jpg'; hk.style.objectPosition = '72% 50%'; if(droneReady){ drone.classList.add('on'); drone.play().catch(()=>{}); } };
+  if(c.home){ back(); np.hidden = true; return; }
+  const src = 'media/places/' + slug(c.city) + '.jpg', im = new Image();
+  im.onload = () => { if(pick.sel !== c) return; plate.src = src; hk.src = src; hk.style.objectPosition = '50% 50%'; drone.classList.remove('on'); drone.pause(); np.hidden = true; };
+  im.onerror = () => { if(pick.sel !== c) return; back(); np.hidden = false; };
+  im.src = src;
+}
+function applyPlace(c, initial){
+  const mid = Math.round((c.lo + c.hi) / 2); pick.mid = mid;
+  if(initial) $('#temp').innerHTML = mid + '&deg;'; else countTo($('#temp'), mid, 700);
+  $('#g-lo').innerHTML = c.lo + '&deg;'; $('#g-hi').innerHTML = '. ' + c.hi + '&deg;';
+  $('#tv1').textContent = c.best.split(',')[0]; $('#tv2').textContent = '$'.repeat(c.cost);
+  if(c.trail){
+    const t = c.trail;
+    $('#il').innerHTML = '<i>::</i>Trail: ' + esc(t[0]);
+    setIP(1,'route', t[1] ? t[1] + ' km' : 'Varies', 'Distance');
+    setIP(2,'clock', t[2], 'Duration');
+    setIP(3,'trend', t[3] ? t[3] + ' m' : 'Varies', 'Elevation gain');
+  } else {
+    $('#il').innerHTML = '<i>::</i>Trip snapshot';
+    setIP(1,'wallet', COST[c.cost], 'Budget per day (approx.)');
+    setIP(2,'bed', c.stay, 'Suggested stay');
+    setIP(3,'cal', c.best, 'Best time');
+  }
+  /* guide */
+  $('#g-title').textContent = c.home ? 'Interlaken and the Lauberhorn Ridge trail' : c.city + ', ' + c.country;
+  $('#g-sub').textContent = c.c2 + '. ' + c.region + (c.cont==='Pakistan' ? ' (local trip within Pakistan)' : ', ' + c.cont) + '.';
+  const f = (k, v, n) => `<div class="fact"><div class="k">${k}</div><div class="v">${esc(v)}</div>${n ? `<div class="n">${esc(n)}</div>` : ''}</div>`;
+  $('#g-facts').innerHTML =
+    f('Best time to go', c.best) +
+    f('Typical daytime temperature', c.lo + '–' + c.hi + ' °C', 'Approximate, in the best season') +
+    f('Budget per person per day', COST[c.cost], 'Approximate, mid-range, in US dollars') +
+    f('Suggested stay', c.stay) +
+    f('Getting there', c.air) +
+    f('Local tip', c.tip);
+  $('#g-plan').innerHTML = c.see.map((x, i) => `<li><b>Day ${i + 1}</b><span>${esc(x)}</span></li>`).join('');
+  const ts = $('#g-trailsec');
+  if(c.trail){
+    const t = c.trail; ts.hidden = false;
+    $('#g-trailh').textContent = t[0];
+    $('#g-trailsub').textContent = c.home ? 'Sample trail numbers for this demo.' : 'Approximate figures. Check a trail map and current conditions before you set out.';
+    const cell = (k, v) => `<div class="fact"><div class="k">${k}</div><div class="v">${esc(v)}</div></div>`;
+    $('#g-trail').innerHTML = cell('Distance', t[1] ? t[1] + ' km' : 'Varies') + cell('Time', t[2]) + cell('Elevation gain', t[3] ? t[3] + ' m' : 'Varies') + cell('Place', c.city);
+  } else ts.hidden = true;
+  const pl = $('#tf-place'); if(pl && !pl.dataset.touched) pl.value = c.city;
+  applyPhoto(c);
+}
+const PKGS_IN = [['Goa',5,18500],['Manali',6,22900],['Jaipur',4,14900],['Kerala',6,26500],['Leh Ladakh',7,38900],['Andaman',6,34500]];
+$('#g-pk').innerHTML = PKGS_IN.map(p => `<div class="pcard"><div class="meta">${p[1]} days / ${p[1]-1} nights</div><h3>${p[0]}</h3><div class="pr">&#8377;${p[2].toLocaleString('en-IN')} <small style="font-size:12px;color:#6b685f">per person</small></div><button class="btn2" type="button" data-pk="${p[0]}">Request this trip</button></div>`).join('');
+$('#tf-list').innerHTML = PKGS_IN.map(p => `<option value="${p[0]}">`).join('') + CITIES.map(c => `<option value="${esc(c.city)}">`).join('');
+$('#tf-place').addEventListener('input', e => { e.target.dataset.touched = '1'; });
+$('#g-pk').addEventListener('click', e => { const b = e.target.closest('[data-pk]'); if(!b) return; const pl = $('#tf-place'); pl.value = b.dataset.pk; pl.dataset.touched = '1'; $('#book').scrollIntoView({behavior: reduce ? 'auto' : 'smooth'}); $('#tf-name').focus({preventScroll:true}); });
+$('#g-change').addEventListener('click', () => { scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'}); setTimeout(openPicker, reduce ? 0 : 450); });
+$('#tripform').addEventListener('submit', e => {
+  e.preventDefault(); const f = e.target, m = $('#tf-msg'), nm = f.elements.pname.value.trim();
+  m.hidden = false;
+  if(!nm || f.elements.pphone.value.replace(/\D/g,'').length < 10){ m.textContent = 'Please enter your name and a 10-digit phone number.'; return; }
+  m.textContent = 'Thanks, ' + nm + '. This is a demo, so nothing was sent. Connect the form to email or a Google Sheet to receive real requests.';
+});
+addEventListener('click', e => { const a = e.target.closest('#a-cue'); if(a){ e.preventDefault(); $('#guide').scrollIntoView({behavior: reduce ? 'auto' : 'smooth'}); } });
+
+/* initial state */
+(function(){ const t = $('#temp'); const d = CITIES.find(c => c.city === DEFAULT_PLACE); if(d && !d.home) choose(d, true); else applyPlace(pick.sel, true); if(!reduce) t.innerHTML = '0&deg;'; })();
+enter();
+</script>
+
+</body></html>
